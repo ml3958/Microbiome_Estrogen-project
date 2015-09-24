@@ -19,3 +19,9 @@ alpha_diversity.py -i otu_table_rdp_nochimera_m0001.biom -m PD_whole_tree -o adi
 ## 9.24
 #Generate rarefied OTU tables; compute alpha diversity metrics for each rarefied OTU table; collate alpha diversity results; and generate alpha rarefaction plots.
 alpha_rarefaction.py -i otu_table_rdp_nochimera_m0001.biom  -o diversity/a_rarefaction/ -t rep_set.tre  -m Barcode+Metadata.txt
+
+#Add alpha diversity to mapping files.
+# output <alpha_mapping_09242015.txt>
+add_alpha_to_mapping_file.py -i adiv_pd.txt -m ~/Documents/Research/Rotation/Blaser\ lab/Estrogen/Qiime/Barcode_Metadata.txt -o alpha_mapping_09242015.txt
+
+
