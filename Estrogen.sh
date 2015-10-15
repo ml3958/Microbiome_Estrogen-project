@@ -40,3 +40,9 @@ beta_diversity_through_plots.py -i otu_table_rdp_nochimera_m0001.biom -o diversi
 
 
 ##10.12
+##filter 19.1 28.2 20.1 20.2
+menghans-mbp:seq_result menghanliu$ filter_samples_from_otu_table.py -i otu_table_rdp_nochimera_m0001.biom -o otu_table_rdp_nochimera_m0001_filter.biom -m ../metadata_mapping_files/10062015.txt -s 'SampleID:*,!19.1 28.2 20.1 20.2'
+## compute Adiv shannon index
+alpha_diversity.py -i otu_table_rdp_nochimera_m0001_filter.biom -m shannon -o ../diversity/alpha_div/adiv_shannon_pd.txt -t rep_set.tre
+## add Shannon index into mapping file
+add_alpha_to_mapping_file.py -i ../diversity/alpha_div/adiv_shannon_pd.txt -m ../metadata_mapping_files/10062015.txt -o 10152015_shannon.txt
