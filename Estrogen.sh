@@ -50,4 +50,37 @@ alpha_diversity.py -i otu_table_rdp_nochimera_m0001_filter.biom -m shannon -o ..
 ## add Shannon index into mapping file
 add_alpha_to_mapping_file.py -i ../diversity/alpha_div/adiv_shannon_pd.txt -m ../metadata_mapping_files/10062015.txt -o 10152015_shannon.txt
 
+# Convert to JSON before running normalize abunance (for use with qiime 1.9.1)
+biom convert -i picrust/closed_otu_table.biom -o picrust/closed_otu_table_json.biom --table-type="OTU table" --to-json
+
+-------------PICRUST
+
+# Make directory to store results
+mkdir -p picrust
+
+# Remove new-refrence OTU's
+filter_otus_from_otu_table.py -i biologics/otu_table_biologics_noabx_nodup_n0001.biom -o picrust/closed_otu_table.biom --negate_ids_to_exclude -e /macqiime/greengenes/gg_13_8_otus/rep_set/97_otus.fasta
+
+# Convert to JSON before running normalize abunance (for use with qiime 1.9.1)
+biom convert -i picrust/closed_otu_table.biom -o picrust/closed_otu_table_json.biom --table-type="OTU table" --to-json
+
+# Run PICRUSt ----------------------
+normalize_by_copy_number.py -i picrust/closed_otu_table_json.biom -o picrust/closed_otu_table_json_normalized.biom
+predict_metagenomes.py -i picrust/closed_otu_table_json_normalized.biom -o picrust/metagenome_predictions.biom
+
+# Cat by Function
+mkdir -p picrust/cat_by_function
+categorize_by_function.py -i picrust/metagenome_predictions.biom -c KEGG_Pathways -l 3 -o picrust/cat_by_function/predicted_metagenomes.L3.biom
+categorize_by_function.py -i picrust/metagenome_predictions.biom -c KEGG_Pathways -l 2 -o picrust/cat_by_function/predicted_metagenomes.L2.biom
+categorize_by_function.py -i picrust/metagenome_predictions.biom -c KEGG_Pathways -l 1 -o picrust/cat_by_function/predicted_metagenomes.L1.biom
+
+# Analayze PICRUSt in QIIME
+mkdir -p picrust/qiime
+echo 'summarize_taxa:md_identifier    "KEGG_Pathways"' >> picrust/picrust_parameters.txt
+echo 'summarize_taxa:absolute_abundance   True' >> picrust/picrust_parameters.txt
+echo 'summarize_taxa:level    2' >> picrust/picrust_parameters.txt
+
+normalize_table.py -i picrust/metagenome_predictions.biom -a DESeq2 -o picrust/cat_by_function/DESeq2_normalized_otu_table.biom
+group_significance.py -i picrust/cat_by_function/DESeq2_normalized_otu_table.biom -m biologics/ibd_biologics_nodup_n0001_noabx_abc.txt -c s_study -s kruskal_wallis -o picrust/qiime/kw_ocs.txt
+
 
