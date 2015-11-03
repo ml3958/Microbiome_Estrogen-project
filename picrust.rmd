@@ -75,11 +75,11 @@ cd
 # Three or more files per input including:
 # The relative abundances of each gene in the input metagenome. 
 
-#type "01". Two columns of tab-delimited text: geneid abundance. The coverages of each pathway, expressed as a fraction between 0 and 1 inclusive. 
-##HUMAnN refers to pathway presence/absence as "coverage," and defines a pathway as a set of two or more genes. 
-#type "04a". Two columns of tab-delimited text: pathid coverage.The relative abundances of each pathway.
-#type "04b". Two columns of tab-delimited text: pathid abundance. Optionally, a table of individual gene abundances appropriate for loading into METAREP. By default tagged as type "99". Five columns of tab-delimited text: geneid abundance e-score %identical identical. The abundance is relative and calculated as in HUMAnN's gene family abundances; e-score, percent identity, and identity length are averaged over all reads mapping to each gene in the input translated BLAST results.
-#Three
+type "01". Two columns of tab-delimited text: geneid abundance. The coverages of each pathway, expressed as a fraction between 0 and 1 inclusive. 
+HUMAnN refers to pathway presence/absence as "coverage," and defines a pathway as a set of two or more genes. 
+type "04a". Two columns of tab-delimited text: pathid coverage.The relative abundances of each pathway.
+type "04b". Two columns of tab-delimited text: pathid abundance. Optionally, a table of individual gene abundances appropriate for loading into METAREP. By default tagged as type "99". Five columns of tab-delimited text: geneid abundance e-score %identical identical. The abundance is relative and calculated as in HUMAnN's gene family abundances; e-score, percent identity, and identity length are averaged over all reads mapping to each gene in the input translated BLAST results.
+Three
 
 
 
