@@ -81,6 +81,10 @@ Three or more files per input including:
 
 The relative abundances of each gene in the input metagenome. 
 
+# compute the contributions of each microbiome to certain gene/proteins
+metagenome_contributions.py -i Estrogen/picrust/closed_otu_table_json_normalized.biom -l K00001,K00002,K00004 -o ko_metagenome_contributions.tab
+
+
 
 
 
