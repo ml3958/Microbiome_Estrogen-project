@@ -9,7 +9,7 @@
 ### Date 11.3.2015 
 ###############
 
-# remove OTUs that are not recognised by green gene database
+#remove OTUs that are not recognised by green gene database
 ```
 normalize_table.py -i Galaxy21-\[Predict_Metagenome_on_data_20\].picrustp -a DESeq2 -o qiime/DESeq2_normalized_otu_table.biom
 ```
