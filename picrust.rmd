@@ -73,7 +73,7 @@ cd
 
 # OUTPUTS
 Three or more files per input including:
- 1) type "01". Two columns of tab-delimited text: geneid abundance. The coverages of each pathway, expressed as a fraction   between 0 and 1 inclusive. 
+ 1) type "01". Two columns of tab-delimited text: geneid abundance. The coverages of each pathway, expressed as a fraction   between 0 and 1 inclusive. \n
   HUMAnN refers to pathway presence/absence as "coverage," and defines a pathway as a set of two or more genes. 
  2) type "04a". Two columns of tab-delimited text: pathid coverage.The relative abundances of each pathway.
  3) type "04b". Two columns of tab-delimited text: pathid abundance. Optionally, a table of individual gene abundances appropriate for loading into METAREP. 
