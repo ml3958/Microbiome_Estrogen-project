@@ -1,0 +1,87 @@
+
+
+
+
+ 
+###############
+# ---------------PICRUSt Analysis -----------------
+# ---------------author @Menghan ---------------
+# ---------------Date 11.3.2015 ---------------
+###############
+
+# remove OTUs that are not recognised by green gene database
+```
+normalize_table.py -i Galaxy21-\[Predict_Metagenome_on_data_20\].picrustp -a DESeq2 -o qiime/DESeq2_normalized_otu_table.biom
+```
+
+# Convert biom to jason format
+```
+biom convert -i closed_otu_table_for_picrust.biom -o ../picrust/closed_otu_talbe_json.biom --table-type="OTU table" --to-json
+```
+
+# load picrust
+```
+module unload picrust/0.9.1
+module load picrust/1.0.0
+```
+# Run PICRUSt ----------------------
+```
+normalize_by_copy_number.py -i picrust/closed_otu_table_json.biom -o picrust/closed_otu_table_json_normalized.biom
+predict_metagenomes.py -i picrust/closed_otu_table_json_normalized.biom -o picrust/metagenome_predictions.biom
+```
+
+# Cat by Function
+```
+mkdir -p picrust/cat_by_function
+categorize_by_function.py -i picrust/metagenome_predictions.biom -c KEGG_Pathways -l 3 -o picrust/cat_by_function/predicted_metagenomes.L3.biom
+categorize_by_function.py -i picrust/metagenome_predictions.biom -c KEGG_Pathways -l 2 -o picrust/cat_by_function/predicted_metagenomes.L2.biom
+categorize_by_function.py -i picrust/metagenome_predictions.biom -c KEGG_Pathways -l 1 -o picrust/cat_by_function/predicted_metagenomes.L1.biom
+```
+
+# Analayze PICRUSt in QIIME
+```
+mkdir -p picrust/qiime
+echo 'summarize_taxa:md_identifier    "KEGG_Pathways"' >> picrust/picrust_parameters.txt
+echo 'summarize_taxa:absolute_abundance   True' >> picrust/picrust_parameters.txt
+echo 'summarize_taxa:level    2' >> picrust/picrust_parameters.txt
+
+normalize_table.py -i picrust/metagenome_predictions.biom -a DESeq2 -o picrust/cat_by_function/DESeq2_normalized_otu_table.biom
+group_significance.py -i picrust/cat_by_function/DESeq2_normalized_otu_table.biom -m biologics/ibd_biologics_nodup_n0001_noabx_abc.txt -c s_study -s kruskal_wallis -o picrust/qiime/kw_ocs.txt
+```
+
+###############
+# --------------- humann Analysis ---------------
+# --------------- author @Menghan ---------------
+# --------------- Date 11.3.2015 ---------------
+###############
+
+# Running HUMAnN
+# Copy input file to the input folder in the HUMAnN repository (i.e. ../humann/input/)
+```
+cp picrust/metagenome_predictions.biom humann-0.99\ 2/input/
+```
+
+# Convert BIOM files to TSV format
+```
+biom convert -i humann-0.99\ 2/input/metagenome_predictions.biom -o metagenome_predictions.tsv -b
+```
+# execute HUMAnN, run "scons" the following command from the main repository path (i.e. ../humann/)
+```
+cd 
+../humann/
+```
+
+# OUTPUTS
+# Three or more files per input including:
+# The relative abundances of each gene in the input metagenome. 
+
+#type "01". Two columns of tab-delimited text: geneid abundance. The coverages of each pathway, expressed as a fraction between 0 and 1 inclusive. 
+##HUMAnN refers to pathway presence/absence as "coverage," and defines a pathway as a set of two or more genes. 
+#type "04a". Two columns of tab-delimited text: pathid coverage.The relative abundances of each pathway.
+#type "04b". Two columns of tab-delimited text: pathid abundance. Optionally, a table of individual gene abundances appropriate for loading into METAREP. By default tagged as type "99". Five columns of tab-delimited text: geneid abundance e-score %identical identical. The abundance is relative and calculated as in HUMAnN's gene family abundances; e-score, percent identity, and identity length are averaged over all reads mapping to each gene in the input translated BLAST results.
+#Three
+
+
+
+
+
